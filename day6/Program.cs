@@ -15,7 +15,11 @@ namespace day6
             int totalCount = 0;
 
             foreach (var group in groups) {
-                var yeses = questions.Sum(q => group.Contains(q)?1:0);
+                var yeses = 0;
+                // I'm sure I could do this with Linq, but my brain hurts.
+                foreach (var q in questions) {
+                    yeses += group.Split("\r\n").All(answer => answer.Contains(q))?1:0;
+                }
                 Console.WriteLine(group);
                 Console.WriteLine($" -> {yeses}");
                 totalCount += yeses;
