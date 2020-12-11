@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace day5
 {
@@ -8,18 +9,26 @@ namespace day5
         {
             var input = System.IO.File.ReadAllLines("input.txt");
 
-            int maxRow = 0;
+            var seatIds = new List<int>();
 
             foreach (var line in input) {
                 // get value
                 var rowVal = GetValue(line.Substring(0,7));
                 var colVal = GetValue(line.Substring(7));
                 var seatId = rowVal * 8 + colVal;
-                Console.WriteLine($"'{input}' -> Row {rowVal}, Seat {colVal}, Seat ID {seatId}");
-                if (seatId > maxRow)
-                    maxRow = seatId;
+                Console.WriteLine($"'{line}' -> Row {rowVal}, Seat {colVal}, Seat ID {seatId}");
+                seatIds.Add(seatId);
             }
-            Console.WriteLine($"Max Seat ID: {maxRow}");
+            
+            // dump the missing seats
+            seatIds.Sort();
+            var lastSeat = 0;
+            for (int i=0;i<seatIds.Count;i++) {
+                if (seatIds[i] != lastSeat+1) {
+                    Console.WriteLine($"Seat missing between {lastSeat} and {seatIds[i]}!");
+                }
+                lastSeat = seatIds[i];
+            }
         }
 
         static int GetValue(string encoded) {
